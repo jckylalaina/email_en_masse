@@ -38,4 +38,14 @@ class Mail
   end
 
 end
-Mail.new.get_town_hall
+class Data
+  @tabhash = Mail.getting_the_townhall
+  def save_as_JSON
+  File.open("db/scrapper.json","w") do |f|
+    f.write(JSON.pretty_generate(@tabhash))
+    end
+  end
+  def save_as_csv
+    File.open("db/scrapper.csv", "w") {|f| f.write(@tabhash.inject([]) { |csv, row|  csv << CSV.generate_line(row) }.join(""))}
+  end
+end

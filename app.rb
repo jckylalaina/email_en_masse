@@ -20,3 +20,16 @@ msg.to   = {
 message = Google::Apis::GmailV1::Message.new(raw: msg.to_s)
 
 service.send_user_message('me', message)
+$:.unshift File.expand_path("./../lib", __FILE__)
+require 'app/scrapper'
+# call the scrapp_data and save_as_JSON
+@tabs = Scrapper.new
+def save_as_JSON
+	File.open("db/scrapper.json","w") do |f|
+		f.write(JSON.pretty_generate(@tabs.getting_the_townhall))
+    end
+end
+# create of the save of the csv
+def save_as_csv
+	File.open("db/scrapper.csv", "w") {|f| f.write(@tabs.getting_the_townhall.inject([]) { |csv, row|  csv << CSV.generate_line(row) }.join(""))}
+end
